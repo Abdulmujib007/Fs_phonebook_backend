@@ -1,9 +1,12 @@
-# DELETE  http://localhost:3001/api/persons/:3
+#  DELETE http://localhost:3001/api/persons/:3
 
-post http://localhost:3001/api/person
-  Content-Type: application/json
+# post http://localhost:3001/api/person
+#   Content-Type: application/json
 
-{
-    "name" : "Abdulmujib",
-     "number" : "08067484632"
-}
+# {
+#     "name" : "mujib",
+#     "number":"08067484632"
+# }
+
+
+GET http://localhost:3001/api/persons
