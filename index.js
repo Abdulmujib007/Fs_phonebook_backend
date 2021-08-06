@@ -1,7 +1,14 @@
 const express = require("express");
+const morgan = require("morgan");
 
 const server = express();
+
 server.use(express.json());
+
+morgan.token('response', function(req,res){return JSON.stringify(req.body)})
+
+// server.use(morgan(''));
+server.use(morgan(':method :url :status :res[content-length] - :response-time ms :response'));
 
 let persons = [
   {
@@ -40,7 +47,7 @@ server.get("/api/persons", (req, res) => {
 });
 
 server.get(`/api/persons/:id`, (req, res) => {
-  const id = Number(req.params.id.replace(":", ""));
+  const id = Number(req.params.id);
   const person = persons.find((person) => person.id == id);
   if (person) {
     res.send(person);
@@ -56,12 +63,10 @@ server.get("/info", (req, res) => {
   </div>`);
 });
 server.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id.replace(':',''));
+  const id = Number(req.params.id);
   persons = persons.filter((person) => person.id !== id);
   res.status(204).end();
 });
-
-
 
 server.post("/api/person", (req, res) => {
   const person = req.body;
