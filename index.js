@@ -1,5 +1,6 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require('cors')
 
 const server = express();
 
@@ -9,6 +10,8 @@ morgan.token('response', function(req,res){return JSON.stringify(req.body)})
 
 // server.use(morgan(''));
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms :response'));
+
+server.use(cors())
 
 let persons = [
   {
@@ -38,13 +41,7 @@ const generateId = () => {
   return maxId;
 };
 
-server.get("/", (req, res) => {
-  res.send("<h1>This is the Phonebook server</h1>");
-});
 
-server.get("/api/persons", (req, res) => {
-  res.send(persons);
-});
 
 server.get(`/api/persons/:id`, (req, res) => {
   const id = Number(req.params.id);
@@ -56,19 +53,13 @@ server.get(`/api/persons/:id`, (req, res) => {
   }
 });
 
-server.get("/info", (req, res) => {
-  res.send(`<div>
-  <p>Phonebook has info for ${persons.length} people</p>
-  <p>${new Date()}</p>    
-  </div>`);
-});
 server.delete("/api/persons/:id", (req, res) => {
   const id = Number(req.params.id);
   persons = persons.filter((person) => person.id !== id);
   res.status(204).end();
 });
 
-server.post("/api/person", (req, res) => {
+server.post("/api/persons", (req, res) => {
   const person = req.body;
   console.log(person);
   if (persons.find((item) => item.name === person.name)) {
@@ -81,6 +72,23 @@ server.post("/api/person", (req, res) => {
   } else res.status(400).end();
 });
 
-server.listen("3001", () => {
-  console.log(`server is running on http/localhost:3001`);
+server.get("/api/persons", (req, res) => {
+  res.send(persons);
+});
+
+server.get("/info", (req, res) => {
+  res.send(`<div>
+  <p>Phonebook has info for ${persons.length} people</p>
+  <p>${new Date()}</p>    
+  </div>`);
+});
+
+
+server.get("/", (req, res) => {
+  res.send("<h1>This is the Phonebook server</h1>");
+});
+
+const PORT = process.env.PORT || 3001
+server.listen(PORT, () => {
+  console.log(`server is running on ${PORT}`);
 });
