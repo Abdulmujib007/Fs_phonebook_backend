@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require('cors')
+require('dotenv').config()
 
 const server = express();
 
@@ -88,7 +89,7 @@ server.get("/", (req, res) => {
   res.send("<h1>This is the Phonebook server</h1>");
 });
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5050
 server.listen(PORT, () => {
   console.log(`server is running on ${PORT}`);
 });
