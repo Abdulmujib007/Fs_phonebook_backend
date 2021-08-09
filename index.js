@@ -6,6 +6,7 @@ require('dotenv').config()
 const server = express();
 
 server.use(express.json());
+server.use(express.static('build'))
 
 morgan.token('response', function(req,res){return JSON.stringify(req.body)})
 
