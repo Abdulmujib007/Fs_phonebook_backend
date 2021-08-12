@@ -10,7 +10,6 @@ server.use(express.static('build'))
 
 morgan.token('response', function(req,res){return JSON.stringify(req.body)})
 
-// server.use(morgan(''));
 server.use(morgan(':method :url :status :res[content-length] - :response-time ms :response'));
 
 server.use(cors())
