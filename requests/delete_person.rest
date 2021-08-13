@@ -1,15 +1,18 @@
   ### delete 
- DELETE/ http://localhost:3001/api/persons/4
-
+  DELETE http://localhost:3030/api/persons/61159e77a2214722fbed4ed6
 
 ### post
-post http://localhost:3001/api/person
- Content-Type: application/json
+# post http://localhost:3030/api/persons
+#  Content-Type: application/json
 
- {
-   "name" : "abdulmuijb",
-   "number": "69956"
- }
+#  {
+#    "name":"boss",
+#    "number":"0905613652"
+#  }
   ### get
 
-# GET http://localhost:3001/api/persons
+GET http://localhost:3030/api/persons
+
+##get specific
+
+#  get http://localhost:3030/api/persons/611670798f7a2d4172594dd6
