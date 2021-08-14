@@ -1,17 +1,17 @@
   ### delete 
-  DELETE http://localhost:3030/api/persons/61159e77a2214722fbed4ed6
+  # DELETE http://localhost:3030/api/persons/61159e77a2214722fbed4ed6
 
 ### post
-# post http://localhost:3030/api/persons
-#  Content-Type: application/json
+PUT http://localhost:3030/api/persons/611670e03636d441bbf67cea
+ Content-Type: application/json
 
-#  {
-#    "name":"boss",
-#    "number":"0905613652"
-#  }
+ {
+   "name":"boss",
+   "number":"09067484632"
+ }
   ### get
 
-GET http://localhost:3030/api/persons
+# GET http://localhost:3030/api/persons
 
 ##get specific
 

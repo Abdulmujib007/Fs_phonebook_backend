@@ -4,8 +4,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 const Person = require("./models/person");
 
-const server = express();
 
+const server = express();
 server.use(express.json());
 server.use(express.static("build"));
 
@@ -21,11 +21,41 @@ server.use(
 
 server.use(cors());
 
-server.get(`/api/persons/:id`, (req, res) => {
+const errorHandler = (err, request, response, next) => {
+  console.error(err.message)
+
+  if (err.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(err)
+}
+
+server.use(errorHandler)
+
+  
+server.put('/api/persons/:id', (req,res,next) => {
+  const newUpdate = req.body
+  const newPerson = {
+    name: newUpdate.name,
+    number:newUpdate.number
+  }
+  console.log(newPerson)
+  Person.findByIdAndUpdate(req.params.id,newPerson,{new:true})
+    .then(updatedPerson => {
+        res.send(updatedPerson)
+    })
+    .catch(err => next(err))
+})
+
+server.get(`/api/persons/:id`, (req, res,next) => {
   const id = req.params.id;
   Person.findById(id).then((person) => {
-    res.send(person);
-  });
+    if(person) res.send(person);
+      else  res.status(404).end()
+   
+  })
+   .catch(err => next(err))
 });
 
 server.delete("/api/persons/:id", (req, res) => {
@@ -34,6 +64,8 @@ server.delete("/api/persons/:id", (req, res) => {
     res.status(204).end();
   });
 });
+   
+
 
 server.post("/api/persons", (req, res) => {
   const peeps = req.body;
@@ -57,7 +89,7 @@ server.get("/api/persons", (req, res) => {
 
 server.get("/info", (req, res) => {
   res.send(`<div>
-  <p>Phonebook has info for ${persons.length} people</p>
+  <p>Phonebook has info for ${Person.length} people</p>
   <p>${new Date()}</p>    
   </div>`);
 });
