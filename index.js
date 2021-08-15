@@ -21,17 +21,18 @@ server.use(
 
 server.use(cors());
 
-const errorHandler = (err, request, response, next) => {
-  console.error(err.message)
+const errorHandler = (error, request, response, next) => {
+  console.error({errorhandler:error.message})
 
-  if (err.name === 'CastError') {
+  if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
-  } 
+  }  else if(error.name === 'ValidationError') {
+    return response.status(400).json({error:error.message})
+  }
 
-  next(err)
+  next(error)
 }
 
-server.use(errorHandler)
 
   
 server.put('/api/persons/:id', (req,res,next) => {
@@ -41,7 +42,7 @@ server.put('/api/persons/:id', (req,res,next) => {
     number:newUpdate.number
   }
   console.log(newPerson)
-  Person.findByIdAndUpdate(req.params.id,newPerson,{new:true})
+  Person.findByIdAndUpdate(req.params.id,newPerson,{new:true,runValidators:true})
     .then(updatedPerson => {
         res.send(updatedPerson)
     })
@@ -55,7 +56,7 @@ server.get(`/api/persons/:id`, (req, res,next) => {
       else  res.status(404).end()
    
   })
-   .catch(err => next(err))
+   .catch(error => next(error))
 });
 
 server.delete("/api/persons/:id", (req, res) => {
@@ -67,7 +68,7 @@ server.delete("/api/persons/:id", (req, res) => {
    
 
 
-server.post("/api/persons", (req, res) => {
+server.post("/api/persons", (req, res,next) => {
   const peeps = req.body;
   console.log(peeps);
   if (peeps.name && peeps.number) {
@@ -77,7 +78,8 @@ server.post("/api/persons", (req, res) => {
     });
     person.save().then((savedPerson) => {
       res.send(savedPerson);
-    });
+    })
+    .catch(err => next(err))
   } else res.status(400).end();
 });
 
@@ -97,6 +99,10 @@ server.get("/info", (req, res) => {
 server.get("/", (req, res) => {
   res.send("<h1>This is the Phonebook server</h1>");
 });
+
+
+server.use(errorHandler)
+
 
 const PORT = process.env.PORT || 5050;
 server.listen(PORT, () => {
