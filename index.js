@@ -1,25 +1,25 @@
-require("dotenv").config();
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const Person = require("./models/person");
+require('dotenv').config()
+const express = require('express')
+const morgan = require('morgan')
+const cors = require('cors')
+const Person = require('./models/person')
 
 
-const server = express();
-server.use(express.json());
-server.use(express.static("build"));
+const server = express()
+server.use(express.json())
+server.use(express.static('build'))
 
-morgan.token("response", function (req, res) {
-  return JSON.stringify(req.body);
-});
+morgan.token('response', function (req) {
+  return JSON.stringify(req.body)
+})
 
 server.use(
   morgan(
-    ":method :url :status :res[content-length] - :response-time ms :response"
+    ':method :url :status :res[content-length] - :response-time ms :response'
   )
-);
+)
 
-server.use(cors());
+server.use(cors())
 
 const errorHandler = (error, request, response, next) => {
   console.error({errorhandler:error.message})
@@ -44,67 +44,67 @@ server.put('/api/persons/:id', (req,res,next) => {
   console.log(newPerson)
   Person.findByIdAndUpdate(req.params.id,newPerson,{new:true,runValidators:true})
     .then(updatedPerson => {
-        res.send(updatedPerson)
+      res.send(updatedPerson)
     })
     .catch(err => next(err))
 })
 
-server.get(`/api/persons/:id`, (req, res,next) => {
-  const id = req.params.id;
+server.get('/api/persons/:id', (req, res,next) => {
+  const id = req.params.id
   Person.findById(id).then((person) => {
-    if(person) res.send(person);
-      else  res.status(404).end()
-   
+    if(person) res.send(person)
+    else  res.status(404).end()  
+     
   })
-   .catch(error => next(error))
-});
+    .catch(error => next(error))
+})
 
-server.delete("/api/persons/:id", (req, res) => {
-  const deleteid = req.params.id;
-  Person.findByIdAndRemove(deleteid).then((deleted) => {
-    res.status(204).end();
-  });
-});
+server.delete('/api/persons/:id', (req, res) => {
+  const deleteid = req.params.id
+  Person.findByIdAndRemove(deleteid).then(() => {
+    res.status(204).end()
+  })
+})
    
 
 
-server.post("/api/persons", (req, res,next) => {
-  const peeps = req.body;
-  console.log(peeps);
+server.post('/api/persons', (req, res,next) => {
+  const peeps = req.body
+  console.log(peeps)
   if (peeps.name && peeps.number) {
     const person = new Person({
       name: peeps.name,
       number: peeps.number,
-    });
-    person.save().then((savedPerson) => {
-      res.send(savedPerson);
     })
-    .catch(err => next(err))
-  } else res.status(400).end();
-});
+    person.save().then((savedPerson) => {
+      res.send(savedPerson)
+    })
+      .catch(err => next(err))
+  } else res.status(400).end()
+})
 
-server.get("/api/persons", (req, res) => {
+server.get('/api/persons', (req, res) => {
   Person.find({}).then((persons) => {
-    res.send(persons);
-  });
-});
+    res.send(persons)
+  })
+})
 
-server.get("/info", (req, res) => {
+server.get('/info', (req, res) => {
   res.send(`<div>
   <p>Phonebook has info for ${Person.length} people</p>
   <p>${new Date()}</p>    
-  </div>`);
-});
+  </div>`)
+})
 
-server.get("/", (req, res) => {
-  res.send("<h1>This is the Phonebook server</h1>");
-});
+server.get('/', (req, res) => {
+  res.send('<h1>This is the Phonebook server</h1>')
+})
 
 
 server.use(errorHandler)
 
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5050
 server.listen(PORT, () => {
-  console.log(`server is running on ${PORT}`);
-});
+  console.log(`server is running on ${PORT}`)
+})
