@@ -61,8 +61,9 @@ server.get('/api/persons/:id', (req, res,next) => {
 
 server.delete('/api/persons/:id', (req, res) => {
   const deleteid = req.params.id
-  Person.findByIdAndRemove(deleteid).then(() => {
-    res.status(204).end()
+  return Person.findByIdAndRemove(deleteid).then((deletedOne) => {
+    if(deletedOne) res.status(204).end()
+    else res.status(409).send({error:'id not found'})
   })
 })
    

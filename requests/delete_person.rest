@@ -1,7 +1,12 @@
-  ### delete 
-  # DELETE http://localhost:3030/api/persons/61159e77a2214722fbed4ed6
 
-### post
+###get
+# GET http://localhost:3030/api/persons
+
+
+  ### delete 
+ DELETE http://localhost:3030/api/persons/61196a697dbe8e2dfe56de27 
+  
+  ###post
 post http://localhost:3030/api/persons
  Content-Type: application/json
 
@@ -9,10 +14,4 @@ post http://localhost:3030/api/persons
    "name":"ai",
    "number":"09067484632"
  }
-  ### get
-
-# GET http://localhost:3030/api/persons
-
-##get specific
-
-#  get http://localhost:3030/api/persons/611670798f7a2d4172594dd6
+ 
