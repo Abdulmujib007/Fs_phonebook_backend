@@ -1,6 +1,5 @@
 
-###get
-# GET http://localhost:3030/api/persons
+
 
 
   ### delete 
