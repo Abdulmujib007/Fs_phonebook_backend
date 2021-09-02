@@ -1,3 +1,5 @@
+###
+get http://localhost:3030/api/persons
 
 
 
@@ -9,8 +11,3 @@
 post http://localhost:3030/api/persons
  Content-Type: application/json
 
- {
-   "name":"ai",
-   "number":"09067484632"
- }
- 
